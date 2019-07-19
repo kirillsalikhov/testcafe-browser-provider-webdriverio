@@ -1,15 +1,32 @@
 const wdio = require('webdriverio');
+const fs = require("fs");
 
-const { 
-  REMOTE_HOST, 
-  REMOTE_PORT, 
-  ENABLE_VIDEO, 
+const {
+  REMOTE_HOST,
+  REMOTE_PORT,
+  ENABLE_VIDEO,
   ENABLE_VNC,
   CI,
   CI_COMMIT_REF_NAME,
   CI_COMMIT_SHA,
   HEARTBEAT
 } = process.env;
+
+let _capabilitiesExtra = null;
+
+function capabilitiesExtra(target) {
+  if (_capabilitiesExtra === null) {
+    const jsonPath = `${process.cwd()}/appium-caps.json`;
+    if (fs.existsSync(jsonPath)) {
+      _capabilitiesExtra = require(jsonPath);
+    } else {
+      _capabilitiesExtra = {};
+    }
+  }
+
+  return _capabilitiesExtra[target] || {}
+}
+
 
 module.exports = {
   // Send heartbeats to prevent Selenium server killing process due to timeout
@@ -46,7 +63,9 @@ module.exports = {
         enableVNC
       }
     };
-    
+
+    Object.assign(capabilities, capabilitiesExtra(target));
+
     // Set video name for CI
     if (CI && enableVideo) {
       capabilities.videoName = `test-${new Date().toISOString()}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA.slice(0, 8)}.mp4`
