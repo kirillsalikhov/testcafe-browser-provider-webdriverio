@@ -117,7 +117,6 @@ module.exports = {
   },
 
   async takeScreenshot(id, screenshotPath /*, pageWidth, pageHeight */) {
-    this.browsers[id].takeScreenshot(screenshotPath);
-    //this.reportWarning('The screenshot functionality is not supported.');
+    this.browsers[id].saveScreenshot(screenshotPath);
   }
 };
