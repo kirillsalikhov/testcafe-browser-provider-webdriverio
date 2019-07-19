@@ -116,7 +116,7 @@ module.exports = {
     this.reportWarning('The window resize functionality is not supported.');
   },
 
-  async takeScreenshot(d, screenshotPath /*, pageWidth, pageHeight */) {
+  async takeScreenshot(id, screenshotPath /*, pageWidth, pageHeight */) {
     this.browsers[id].takeScreenshot(screenshotPath);
     //this.reportWarning('The screenshot functionality is not supported.');
   }
