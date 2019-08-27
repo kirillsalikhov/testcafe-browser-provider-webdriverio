@@ -85,7 +85,7 @@ module.exports = {
   },
 
   async closeBrowser(id) {
-    this.browsers[id].deleteSession();
+    await this.browsers[id].deleteSession();
     delete this.browsers[id];
     clearInterval(this.heartbeats[id]);
     delete this.heartbeats[id];
@@ -117,6 +117,6 @@ module.exports = {
   },
 
   async takeScreenshot(id, screenshotPath /*, pageWidth, pageHeight */) {
-    this.browsers[id].saveScreenshot(screenshotPath);
+    return this.browsers[id].saveScreenshot(screenshotPath);
   }
 };
