@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/fnlctrl/testcafe-browser-provider-webdriverio#readme",
   "dependencies": {
-    "webdriverio": "^5.2.0"
+    "webdriverio": "^5.13.0"
   }
 }
