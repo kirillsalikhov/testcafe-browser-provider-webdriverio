@@ -1,5 +1,6 @@
 const wdio = require('webdriverio');
-const fs = require("fs");
+const fs = require('fs-extra');
+const { dirname } = require('path');
 
 const {
   REMOTE_HOST,
@@ -117,6 +118,9 @@ module.exports = {
   },
 
   async takeScreenshot(id, screenshotPath /*, pageWidth, pageHeight */) {
+    // for some reason webdriverio stopped creating folder for screenshots
+    await fs.ensureDir(dirname(screenshotPath));
+
     return this.browsers[id].saveScreenshot(screenshotPath);
   }
 };
