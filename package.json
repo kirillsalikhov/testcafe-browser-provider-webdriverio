@@ -1,6 +1,6 @@
 {
   "name": "testcafe-browser-provider-webdriverio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Webdriverio browser plugin for TestCafe",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/fnlctrl/testcafe-browser-provider-webdriverio#readme",
   "dependencies": {
-    "webdriverio": "^5.13.0"
+    "webdriverio": "^7.19.7"
   },
   "devDependencies": {
     "fs-extra": "^8.1.0"
