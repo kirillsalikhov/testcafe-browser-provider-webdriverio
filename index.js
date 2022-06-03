@@ -28,6 +28,9 @@ function capabilitiesExtra(target) {
   return _capabilitiesExtra[target] || {}
 }
 
+// global var, to prevent closing search engine choose several times
+let _defaultSearchEnginePopupDisabled = false;
+
 
 module.exports = {
   // Send heartbeats to prevent Selenium server killing process due to timeout
@@ -77,13 +80,22 @@ module.exports = {
       hostname: REMOTE_HOST.trim(),
       logLevel: CI ? 'silent' : 'error'
     });
+
+    if (!_defaultSearchEnginePopupDisabled) {
+      await _chooseDefaultSearchEngine(browser);
+    }
+    // ! not awaited, if awaited had problems with heartbeat
+    // chromedriver closes session due to inactivity
     browser.navigateTo(pageUrl);
+
     this.browsers[id] = browser;
     this.heartbeats[id] = setInterval(() => {
       if (!this.heartbeats[id]) return;
       browser.getTitle().catch(() => {}); // suppress error
     }, this.heartbeatInterval);
   },
+
+
 
   async closeBrowser(id) {
     await this.browsers[id].deleteSession();
@@ -124,3 +136,27 @@ module.exports = {
     return this.browsers[id].saveScreenshot(screenshotPath);
   }
 };
+
+async function _chooseDefaultSearchEngine(browser){
+  await browser.switchContext('NATIVE_APP');
+
+  // Try to locate Google search engine, if no switch context back and return
+  const testElements = await browser.findElements('xpath','//*[@*="Google"]');
+  if (testElements.length == 0) {
+    console.warn('No Default search popup, or no Goolge option');
+    // disable it, because we've done all we could anyway
+    _defaultSearchEnginePopupDisabled = true;
+    await browser.switchContext('CHROMIUM');
+    return
+  }
+
+  //it finds by name attribute not(@* - which is any attr), but my xpath no is so strong
+  const optRef = await browser.findElement('xpath','//*[@*="Google"]');
+  const okRef = await browser.findElement('xpath','//*[@*="OK"]');
+
+  await browser.elementClick(optRef.ELEMENT);
+  await browser.elementClick(okRef.ELEMENT);
+
+  await browser.switchContext('CHROMIUM');
+  _defaultSearchEnginePopupDisabled = true;
+}
