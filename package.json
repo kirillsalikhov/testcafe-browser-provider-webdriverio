@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/fnlctrl/testcafe-browser-provider-webdriverio#readme",
   "dependencies": {
-    "webdriverio": "^7.19.7"
+    "webdriverio": "^5.23.0"
   },
   "devDependencies": {
     "fs-extra": "^8.1.0"
