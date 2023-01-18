@@ -81,7 +81,7 @@ module.exports = {
       logLevel: CI ? 'silent' : 'error'
     });
 
-    if (!_defaultSearchEnginePopupDisabled) {
+    if (platformName === 'android' && !_defaultSearchEnginePopupDisabled) {
       await _chooseDefaultSearchEngine(browser);
     }
     // ! not awaited, if awaited had problems with heartbeat
